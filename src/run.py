@@ -21,6 +21,10 @@ def build_api() -> tweepy.API:
                       wait_on_rate_limit_notify=True)
 
 
+def print_now():
+    print(datetime.datetime.now())
+
+
 def shindan(shindan_id: int, username: str, api: tweepy.API = None,
             dry_run: bool = False) -> None:
     payload = {'u': username}
@@ -38,10 +42,6 @@ def shindan(shindan_id: int, username: str, api: tweepy.API = None,
         api.update_status(shindan_result)
     print(shindan_id)
     print(shindan_result)
-
-
-def print_now():
-    print(datetime.datetime.now())
 
 
 def main():
