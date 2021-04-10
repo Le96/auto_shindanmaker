@@ -12,6 +12,9 @@ import tweepy
 from env.credentials import *
 
 USERNAME = 'れくろ'
+TARGET_ID = {
+    'daily': (503025, 763660)
+}
 
 
 def build_api() -> tweepy.API:
@@ -19,6 +22,10 @@ def build_api() -> tweepy.API:
     auth.set_access_token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
     return tweepy.API(auth, wait_on_rate_limit=True,
                       wait_on_rate_limit_notify=True)
+
+
+def print_now():
+    print(datetime.datetime.now())
 
 
 def shindan(shindan_id: int, username: str, api: tweepy.API = None,
@@ -40,23 +47,18 @@ def shindan(shindan_id: int, username: str, api: tweepy.API = None,
     print(shindan_result)
 
 
-def print_now():
-    print(datetime.datetime.now())
-
-
 def main():
     # prebuild twitter api
     api = build_api()
     # print time
     schedule.every().day.at('00:00').do(print_now)
-    # shindan at 00:00
-    schedule.every().day.at('00:00').do(
-        shindan, shindan_id=503025, username=USERNAME, api=api)
-    schedule.every().day.at('00:00').do(
-        shindan, shindan_id=763660, username=USERNAME, api=api)
+    # daily shindan
+    for target_id in TARGET_ID['daily']:
+        schedule.every().day.at('00:00').do(shindan, shindan_id=target_id,
+                                            username=USERNAME, api=api)
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(10)
 
 
 if __name__ == '__main__':
