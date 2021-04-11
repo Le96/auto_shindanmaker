@@ -37,7 +37,8 @@ def shindan(shindan_id: int, username: str, api: tweepy.API = None,
         print('error has occured')
         return
     soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-    shindan_url = soup.select('.share_link')[0].attrs['href']
+    shindan_url = soup.select('span.btn-twitter.btn-share-lg')[0]\
+                      .attrs['daat-share_url']
     shindan_result = list(urllib.parse.parse_qs(shindan_url).values())[0][0]
     if not api:
         api = build_api()
