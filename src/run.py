@@ -55,6 +55,8 @@ def main():
     schedule.every().day.at('00:00').do(print_now)
     # daily shindan
     for target_id in TARGET_ID['daily']:
+        # first time execute
+        shindan(shindan_id=target_id, username=USERNAME, api=api)
         schedule.every().day.at('00:00').do(shindan, shindan_id=target_id,
                                             username=USERNAME, api=api)
     while True:
