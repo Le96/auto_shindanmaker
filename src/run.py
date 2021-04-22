@@ -30,15 +30,17 @@ def print_now():
 
 def shindan(shindan_id: int, username: str, api: tweepy.API = None,
             dry_run: bool = False) -> None:
-    payload = {'u': username}
-    resp = requests.post('https://shindanmaker.com/' + str(shindan_id),
-                         data=payload)
-    if not resp.ok:
-        print('error has occured')
-        return
+    session = requests.session()
+    resp = session.get('https://shindanmaker.com/' + str(shindan_id))
     soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-    shindan_url = soup.select('span.btn-twitter.btn-share-lg')[0]\
-                      .attrs['daat-share_url']
+    token = soup.select_one('[name="_token"]')['value']
+    hidname = soup.select_one('[name="hiddenName"]')['value']
+    data = {'_token': token, 'name': username, 'hiddenName': hidname}
+    resp = session.post('https://shindanmaker.com/' + str(shindan_id),
+                        data=data, cookies=resp.cookies)
+    soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+    shindan_url = soup.select_one(
+        '[data-share_target="twitter"]')['data-share_url']
     shindan_result = list(urllib.parse.parse_qs(shindan_url).values())[0][0]
     if not api:
         api = build_api()
