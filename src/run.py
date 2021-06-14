@@ -52,9 +52,7 @@ def shindan(shindan_id: int, username: str, api: tweepy.API = None,
     resp = session.post('https://shindanmaker.com/' + str(shindan_id),
                         data=data, cookies=resp.cookies)
     soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-    shindan_url = soup.select_one(
-        '[data-share_target="twitter"]')['data-share_url']
-    shindan_result = list(urllib.parse.parse_qs(shindan_url).values())[0][0]
+    shindan_result = soup.select_one('#copy-textarea-140').text
     if not api:
         api = build_api()
     if not dry_run:
