@@ -25,8 +25,7 @@ TARGET_ID = {
 def build_api() -> tweepy.API:
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
-    return tweepy.API(auth, wait_on_rate_limit=True,
-                      wait_on_rate_limit_notify=True)
+    return tweepy.API(auth, wait_on_rate_limit=True)
 
 
 def print_now():
