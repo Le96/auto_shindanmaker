@@ -48,7 +48,7 @@ def shindan(shindan_id: int, username: str, api: tweepy.API = None,
     soup = bs4.BeautifulSoup(resp.text, 'html.parser')
     token = soup.select_one('[name="_token"]')['value']
     hidname = soup.select_one('[name="hiddenName"]')['value']
-    data = {'_token': token, 'name': username, 'hiddenName': hidname}
+    data = {'_token': token, 'shindanName': username, 'hiddenName': hidname}
     resp = session.post('https://shindanmaker.com/' + str(shindan_id),
                         data=data, cookies=resp.cookies)
     soup = bs4.BeautifulSoup(resp.text, 'html.parser')
